@@ -1,0 +1,72 @@
+#Healthy Programmer
+# 9am - 5pm
+# Water - water.mp3 (3.5 litres) - Drank - log - Every 40 min
+# Eyes - eyes.mp3 - every 30 min - EyDone - log - Every 30 min
+# Physical activity - physical.mp3 every - 45 min - ExDone - log
+# Rules
+# Pygame module to play audio
+
+
+from pygame import mixer
+
+import time
+
+time_of_action = time.asctime()
+
+time_limit = time.localtime().tm_hour
+
+def playmusic(music, stop):
+    mixer.init()
+    mixer.music.load(music)
+    mixer.music.play()
+    while True:
+        taskfinish = input().capitalize()
+        if taskfinish == stop:
+            mixer.music.stop()
+            break
+
+def log(some_message):
+    with open("healthyprogrammer.txt", "a") as f:
+        f.write(f"{some_message} {time_of_action}\n")
+
+print("---------WELCOME TO HEALTHY PROGRAMMER--------")
+name = input("What is your name\n")
+
+
+if time_limit < 9 or time_limit > 20:
+    print(f"This is not your working hours {name}")
+elif time_limit > 9 or time_limit < 12:
+    print(f"OKAY {name} YOU CAN NOW USE THIS PROGRAM")
+
+    t1 = time.time()
+    t2 = time.time()
+    t3 = time.time()
+
+
+    water_time = 40*60
+    eye_ex_time = 30*60
+    ex_time = 45*60
+
+    while True:
+        #this is for water drinking reminder
+        if time.time() - t1 > water_time:
+            print(f"\n{name} Its Water Drinking time, go get a glass of water and type 'drank' to stop the alarm")
+            playmusic('water.mp3', 'Drank')
+            t1 = time.time()
+            log(f"You Drank Water on")
+
+        #this is for eye excercise reminder
+        if time.time() - t2 > eye_ex_time:
+            print(f"\n{name} Its Eye Excercise time! Go give some rest to your eyes and type 'eydone' to stop the alarm")
+            playmusic('eyes.mp3', 'Eydone')
+            t2 = time.time()
+            log(f"You did Eye Exercise on")
+
+        if time.time() - t3 > ex_time:
+            print(f"\n{name} Its Excercise time! Go relax your muscles and type 'exdone' to stop the alarm")
+            playmusic('physical.mp3', 'Exdone')
+            t3 = time.time()
+            log(f"You did exercise on")
+
+else:
+    print("This is not your working hours")
